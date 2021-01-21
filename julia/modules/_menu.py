@@ -2,6 +2,7 @@ from julia import CMD_LIST
 from julia import tbot
 import io
 import re
+import os
 from math import ceil
 
 from telethon import custom, events, Button
@@ -44,8 +45,8 @@ async def is_register_admin(chat, user):
     return None
 
 
-PM_START_TEXT = "[Julia](https://telegra.ph/MissJulieRobot-10-24)" + \
-    " "+"**"+"V"+BOT_VERSION+"**"
+PM_START_TEXT = os.environ.get("PM_START_TEXT", None)
+PM_PIC = os.environ.get("PM_PIC", None)
 
 
 @register(pattern="^/start$")
@@ -66,32 +67,22 @@ async def start(event):
         await tbot.send_message(
             event.chat_id,
             PM_START_TEXT,
+            file=PM_PIC,
             buttons=[
-                [
-                    Button.url(
-                        "Add To Group  👥", "t.me/MissJuliaRobot?startgroup=true"
-                    ),
-                    Button.url(
-                        "Support Group 🎙️", "https://t.me/MissJuliaRobotSupport"
-                    ),
-                ],
                 [
                     Button.inline("Commands ❓", data="help_menu"),
                     Button.url(
-                        "Source 📀", "https://github.com/MissJuliaRobot/MissJuliaRobot"
+                        "Source Coe", "https://github.com/ProgrammingError/MissJuliaRobot"
                     ),
                 ],
                 [
-                    Button.url(
-                        "Channel 🗞️", url="https://t.me/MissJuliaRobotNews/2"),
-                    Button.url("Webiste 🌐", "missjuliarobot.unaux.com"),
-                    Button.url("Donate 💲", "https://ko-fi.com/missjuliarobot"),
+                    Button.url("My Master", "https://t.me/ProgrammingError")
                 ],
                 [Button.inline("Close Menu 🔒", data="start_again")],
             ],
         )
     else:
-        await event.reply("I am Alive ^_^")
+        await event.reply("I am Alive\n\nRock on with me.")
 
 
 @tbot.on(events.CallbackQuery(pattern=r"start_again"))
@@ -102,7 +93,7 @@ async def start_again(event):
             buttons=[[Button.inline("Reopen Menu 🔑", data="reopen_again")]],
         )
     else:
-        await event.reply("I am Alive ^_^")
+        await event.reply("I am Alive\n\nRock on with me.")
 
 
 @tbot.on(events.CallbackQuery(pattern=r"reopen_again"))
@@ -112,30 +103,21 @@ async def reopen_again(event):
             PM_START_TEXT,
             buttons=[
                 [
-                    Button.url(
-                        "Add To Group  👥", "t.me/MissJuliaRobot?startgroup=true"
-                    ),
-                    Button.url(
-                        "Support Group 🎙️", "https://t.me/MissJuliaRobotSupport"
-                    ),
-                ],
-                [
                     Button.inline("Commands ❓", data="help_menu"),
                     Button.url(
-                        "Source 📀", "https://github.com/MissJuliaRobot/MissJuliaRobot"
+                        "Source Coe", "https://github.com/ProgrammingError/MissJuliaRobot"
                     ),
                 ],
                 [
-                    Button.url(
-                        "Channel 🗞️", url="https://t.me/MissJuliaRobotNews/2"),
-                    Button.url("Webiste 🌐", "missjuliarobot.unaux.com"),
-                    Button.url("Donate 💲", "https://ko-fi.com/missjuliarobot"),
+                    Button.url("My Master", "https://t.me/ProgrammingError")
+                ],
+                [Button.inline("Close Menu 🔒", data="start_again")],
                 ],
                 [Button.inline("Close Menu 🔒", data="start_again")],
             ],
         )
     else:
-        await event.reply("I am Alive ^_^")
+        await event.reply("I am Alive\n\nRock on with me.")
 
 
 @register(pattern="^/help$")
@@ -164,6 +146,8 @@ async def help(event):
 @register(pattern="^/start help$")
 async def help(event):
     approved_userss = approved_users.find({})
+    k = await tbot.get_me()
+    name = k.username
     for ch in approved_userss:
         iid = ch["id"]
         userss = ch["user"]
@@ -180,7 +164,7 @@ async def help(event):
     else:
         await event.reply(
             "Contact me in PM to get the help menu",
-            buttons=[[Button.url("Help ❓", "t.me/MissJuliaRobot?start=help")]],
+            buttons=[[Button.url("Help ❓", f"t.me/{name}?start=help")]],
         )
 
 
